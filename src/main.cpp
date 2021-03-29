@@ -3,13 +3,34 @@
 #include <string>
 #include <stdexcept>
 #include <cstdlib>
+#include <map>
 
 #ifdef _WIN32
 	#include <Windows.h>
 #endif
 
 int main(int argc, char* argv[]);
+void printPossibleColors();
 void colorError();
+
+std::map<std::string, int> colorNames = {
+	{"black", 30},
+	{"maroon", 31},
+	{"green", 32},
+	{"olive", 33},
+	{"navy", 34},
+	{"purple", 35},
+	{"teal", 36},
+	{"silver", 37},
+	{"gray", 90},
+	{"red", 91},
+	{"lime", 92},
+	{"yellow", 93},
+	{"blue", 94},
+	{"fuschia", 95},
+	{"aqua", 96},
+	{"white", 97},
+};
 
 int main(int argc, char* argv[]) {
 
@@ -21,29 +42,35 @@ int main(int argc, char* argv[]) {
 	std::vector<std::string> unparsedArgs(argv + 1, argv + argc);
 
 	for (std::vector<std::string>::iterator it = unparsedArgs.begin(); it != unparsedArgs.end(); ++it) {
-		size_t index = std::distance(unparsedArgs.begin(), it);
 
-		// std::cout << "[DEBUG] " << index << ": " << *it << "\n";
+		if (*it == "--help" || *it == "-h") {
+			std::cout << "Hello World Premium\n\n";
+			std::cout << "Options:\n\n";
+			std::cout << "    --help/-h            Show help text.\n";
+			std::cout << "    --colors/-c <name>   Change the color of the text. Possible values:\n";
+			std::cout << "        ";
+			printPossibleColors();
+			std::cout << "\n";
+			std::cout << "    --underline/-u       Add underline to the text.\n";
 
-		if (*it == "--color" || *it == "-c") {
+			std::exit(0);
+
+		} else if (*it == "--color" || *it == "-c") {
 
 			std::string arg = *it;
 
 			++it;
 			if (it == unparsedArgs.end()) {
-				std::cout << "Error: " << arg << " requeries one argument\n";
+				std::cout << "Error: " << arg << " requires one argument\n";
 				return 1;
 			}
 
-			int argColor;
-
-			try {
-				argColor = std::stoi(*it);
-			} catch (std::invalid_argument& e) {
-				colorError();
-			} catch (std::out_of_range& e) {
+			auto pair = colorNames.find(*it);
+			if (pair == colorNames.end()) {
 				colorError();
 			}
+
+			int argColor = pair->second;
 			
 			if (!((argColor >= 30 && argColor <= 37) || (argColor >= 90 && argColor <= 97))) {
 				colorError();
@@ -95,7 +122,22 @@ int main(int argc, char* argv[]) {
 	return 0;
 }
 
+void printPossibleColors() {
+	int i=0;
+	for (const auto& pair : colorNames) {
+		std::cout << pair.first;
+		if (i != colorNames.size() - 1) {
+			std::cout << ", ";
+		} else {
+			std::cout << "\n";
+		}
+		++i;
+	}
+}
+
 void colorError() {
-	std::cout << "Error: Color must be a number between 30 and 37 or between 90 and 97\n";
+	std::cout << "Error: Color be must one of these values:\n";
+	std::cout << "    ";
+	printPossibleColors();
 	std::exit(1);
 }
