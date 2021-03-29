@@ -13,4 +13,4 @@ project(Hello-World-Premium	VERSION 0.1
 							LANGUAGES CXX)
 
 # add the executable
-add_executable(hwp src/main.cpp)
+add_executable(hwp src/main.cpp src/error.cpp src/terminal.cpp)
