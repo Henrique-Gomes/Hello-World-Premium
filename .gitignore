@@ -38,3 +38,6 @@ bin
 *.exe
 *.out
 *.app
+
+# Outputs
+*.stackdump
