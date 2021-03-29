@@ -69,7 +69,7 @@ int parseColor(std::vector<std::string>::iterator it, std::vector<std::string>::
 
 	++it;
 	if (it == end) {
-		showConsoleError(arg + " requires one argument");
+		showConsoleError(arg + " requires one argument\n");
 		std::exit(1);
 	}
 
@@ -87,7 +87,7 @@ int parseColor(std::vector<std::string>::iterator it, std::vector<std::string>::
 	return argColor;
 }
 
-void formatText(int color, bool underline) {
+void formatText(int color, int backColor, bool underline) {
 	#ifdef _WIN32
 		HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 		DWORD dwMode = 0;
@@ -100,6 +100,10 @@ void formatText(int color, bool underline) {
 
 	if (color != 0) {
 		std::cout << color;
+	}
+
+	if (backColor != 0) {
+		std::cout << ";" << backColor;
 	}
 
 	if (underline) {
