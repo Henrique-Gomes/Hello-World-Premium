@@ -64,7 +64,7 @@ void colorError() {
 	std::exit(1);
 }
 
-int parseColor(std::vector<std::string>::iterator it, std::vector<std::string>::iterator end) {
+int parseColor(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator end) {
 	std::string arg = *it;
 
 	++it;

@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 			textFormatting = true;
 			underline = true;
 
-		} else if ((*it)[0] == '-') {
+		} else {
 			showConsoleError("No argument called " + *it + "\n");
 			std::exit(1);
 		}
