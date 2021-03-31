@@ -27,40 +27,36 @@ std::map<std::string, int> colorNames = {
 	{"white", 97},
 };
 
-void printPossibleColors() {
-	int i=0;
-	for (const auto& pair : colorNames) {
-		std::cout << pair.first;
-		if (i != colorNames.size() - 1) {
-			std::cout << ", ";
-		} else {
-			std::cout << "\n";
-		}
-		++i;
-	}
-}
+std::map<std::string, int> punctuationNames = {
+	{"none", 0},
+	{"!", 1},
+	{".", 2},
+	{"‽", 3},
+	// {"exclamation", 1},
+	// {"period", 2},
+	// {"interrobang", 3},
+};
 
-std::string getPossibleColors() {
-	int i=0;
-	
+std::string getPossibleOptions(std::map<std::string, int>& map) {
+	int i = 0;
 	std::string s = "";
-	
-	for (const auto& pair : colorNames) {
+
+	for (const auto& pair : map) {
 		s += pair.first;
-		if (i != colorNames.size() - 1) {
+		if (i != map.size() - 1) {
 			s += ", ";
 		} else {
 			s += "\n";
 		}
 		++i;
 	}
-	
+
 	return s;
 }
 
 void colorError() {
 	showConsoleError("Color be must one of these values:\n    " +
-		getPossibleColors());
+		getPossibleOptions(colorNames));
 	std::exit(1);
 }
 
@@ -79,11 +75,6 @@ int parseColor(std::vector<std::string>::iterator& it, std::vector<std::string>:
 	}
 
 	int argColor = pair->second;
-	
-	if (!((argColor >= 30 && argColor <= 37) || (argColor >= 90 && argColor <= 97))) {
-		colorError();
-	}
-
 	return argColor;
 }
 
@@ -111,4 +102,28 @@ void formatText(int color, int backColor, bool underline) {
 	}
 
 	std::cout << "m";
+}
+
+void punctuationError() {
+	showConsoleError("Punctuation be must one of these values:\n    " +
+		getPossibleOptions(punctuationNames));
+	std::exit(1);
+}
+
+int parsePunctuation(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator end) {
+	std::string arg = *it;
+
+	++it;
+	if (it == end) {
+		showConsoleError(arg + " requires one argument\n");
+		std::exit(1);
+	}
+
+	auto pair = punctuationNames.find(*it);
+	if (pair == punctuationNames.end()) {
+		punctuationError();
+	}
+
+	int argPunctuation = pair->second;
+	return argPunctuation;
 }

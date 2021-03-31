@@ -12,6 +12,7 @@ int main(int argc, char* argv[]) {
 	int color = 0;
 	int backColor = 0;
 	bool underline = false;
+	int punctuation = 1;
 
 	std::vector<std::string> unparsedArgs(argv + 1, argv + argc);
 
@@ -21,14 +22,19 @@ int main(int argc, char* argv[]) {
 			std::cout << "Hello World Premium\n";
 			std::cout << "\n";
 			std::cout << "Options:\n";
-			std::cout << "    -h, --help                      Show help text.\n";
-			std::cout << "    -c, --color <color-name>        Change the color of the text.\n";
-			std::cout << "    -b, --back-color <color-name>   Change the background color of the text.\n";
-			std::cout << "    -u, --underline                 Add underline to the text.\n";
+			std::cout << "    -h, --help                             Show help text.\n";
+			std::cout << "    -c, --color <color-name>               Change the color of the text.\n";
+			std::cout << "    -b, --back-color <color-name>          Change the background color of the text.\n";
+			std::cout << "    -u, --underline                        Add underline to the text.\n";
+			std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
 			std::cout << "\n";
 			std::cout << "<color-name> values:\n";
 			std::cout << "    ";
-			printPossibleColors();
+			std::cout << getPossibleOptions(colorNames);
+			std::cout << "\n";
+			std::cout << "<punctuation-name> values:\n";
+			std::cout << "    ";
+			std::cout << getPossibleOptions(punctuationNames);
 			std::cout << "\n";
 
 			std::exit(0);
@@ -45,6 +51,9 @@ int main(int argc, char* argv[]) {
 			textFormatting = true;
 			underline = true;
 
+		} else if (*it == "--punctuation" || *it == "-p") {
+			punctuation = parsePunctuation(it, unparsedArgs.end());
+
 		} else {
 			showConsoleError("No argument called " + *it + "\n");
 			std::exit(1);
@@ -57,7 +66,19 @@ int main(int argc, char* argv[]) {
 		formatText(color, backColor, underline);
 	}
 
-	std::cout << "Hello, world!" << std::endl;
+	std::cout << "Hello, world";
+
+	switch (punctuation) {
+		case 0: break;
+		case 1: std::cout << "!";
+			break;
+		case 2: std::cout << ".";
+			break;
+		case 3: std::cout << "‽";
+			break;
+	}
+
+	std::cout << std::endl;
 
 	if (textFormatting) {
 		std::cout << "\033[0m";
