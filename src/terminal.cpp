@@ -37,6 +37,16 @@ std::map<std::string, int> punctuationNames = {
 	// {"interrobang", 3},
 };
 
+std::map<std::string, int> caseNames = {
+	{"sentence", 0}, // Hello, world!
+	{"upper", 1}, // HELLO, WORLD!
+	{"lower", 2}, // hello, world!
+	{"title", 3}, // Hello, World!
+	{"camel", 4}, // hello, World!
+	{"wacky", 5}, // hElLo, WoRlD!
+	{"random", 6},
+};
+
 std::string getPossibleOptions(std::map<std::string, int>& map) {
 	int i = 0;
 	std::string s = "";
@@ -74,8 +84,7 @@ int parseColor(std::vector<std::string>::iterator& it, std::vector<std::string>:
 		colorError();
 	}
 
-	int argColor = pair->second;
-	return argColor;
+	return pair->second;
 }
 
 void formatText(int color, int backColor, bool underline) {
@@ -124,6 +133,28 @@ int parsePunctuation(std::vector<std::string>::iterator& it, std::vector<std::st
 		punctuationError();
 	}
 
-	int argPunctuation = pair->second;
-	return argPunctuation;
+	return pair->second;
+}
+
+void caseError() {
+	showConsoleError("Case be must one of these values:\n    " +
+		getPossibleOptions(caseNames));
+	std::exit(1);
+}
+
+int parseCase(std::vector<std::string>::iterator& it, std::vector<std::string>::iterator end) {
+	std::string arg = *it;
+
+	++it;
+	if (it == end) {
+		showConsoleError(arg + " requires one argument\n");
+		std::exit(1);
+	}
+
+	auto pair = caseNames.find(*it);
+	if (pair == caseNames.end()) {
+		caseError();
+	}
+
+	return pair->second;
 }

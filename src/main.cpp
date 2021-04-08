@@ -2,6 +2,9 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <cctype>
+#include <cstdlib>
+#include <ctime>
 #include "terminal.hpp"
 #include "error.hpp"
 
@@ -13,6 +16,7 @@ int main(int argc, char* argv[]) {
 	int backColor = 0;
 	bool underline = false;
 	int punctuation = 1;
+	int case_ = 0;
 
 	std::vector<std::string> unparsedArgs(argv + 1, argv + argc);
 
@@ -27,6 +31,7 @@ int main(int argc, char* argv[]) {
 			std::cout << "    -b, --back-color <color-name>          Change the background color of the text.\n";
 			std::cout << "    -u, --underline                        Add underline to the text.\n";
 			std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
+			std::cout << "    -a, --case <case-name>                 Change the case of the text.\n";
 			std::cout << "\n";
 			std::cout << "<color-name> values:\n";
 			std::cout << "    ";
@@ -35,6 +40,10 @@ int main(int argc, char* argv[]) {
 			std::cout << "<punctuation-name> values:\n";
 			std::cout << "    ";
 			std::cout << getPossibleOptions(punctuationNames);
+			std::cout << "\n";
+			std::cout << "<case-name> values:\n";
+			std::cout << "    ";
+			std::cout << getPossibleOptions(caseNames);
 			std::cout << "\n";
 
 			std::exit(0);
@@ -54,6 +63,9 @@ int main(int argc, char* argv[]) {
 		} else if (*it == "--punctuation" || *it == "-p") {
 			punctuation = parsePunctuation(it, unparsedArgs.end());
 
+		} else if (*it == "--case" || *it == "-a") {
+			case_ = parseCase(it, unparsedArgs.end());
+
 		} else {
 			showConsoleError("No argument called " + *it + "\n");
 			std::exit(1);
@@ -66,7 +78,31 @@ int main(int argc, char* argv[]) {
 		formatText(color, backColor, underline);
 	}
 
-	std::cout << "Hello, world";
+	std::string helloWorld = "HELLO, WORLD";;
+
+	switch (case_) {
+		case 0: helloWorld = "Hello, world";
+			break;
+		case 1: break;
+		case 2: helloWorld = "hello, world";
+			break;
+		case 3: helloWorld = "Hello, World";
+			break;
+		case 4: helloWorld = "hello, World";
+			break;
+		case 5: helloWorld = "hElLo, WoRlD";
+			break;
+		case 6:
+			std::srand(std::time(0));
+			for (std::string::reference c : helloWorld) {
+				if ((std::rand() % 2) == 0) {
+					c = std::tolower(c);
+				}
+			}
+			break;
+	}
+
+	std::cout << helloWorld;
 
 	switch (punctuation) {
 		case 0: break;
