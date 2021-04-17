@@ -4,12 +4,12 @@
 
 #include <iostream> // for cout
 #include <map>
+#include <random>
 #include <string>
 #include <vector>
 
 #include <cctype> // for tolower
-#include <cstdlib> // for srand, rand, exit
-#include <ctime> // for time
+#include <cstdlib> // for exit
 
 std::map<std::string, int> HWP::colorNames = {
 	{"black", 30},
@@ -156,7 +156,7 @@ void HWP::printHelloWorld() {
 		Formatter::setFormat(color, backColor, underline);
 	}
 
-	std::string helloWorld = "HELLO, WORLD";;
+	std::string helloWorld = "HELLO, WORLD";
 
 	switch (case_) {
 		case 0: helloWorld = "Hello, world";
@@ -171,9 +171,14 @@ void HWP::printHelloWorld() {
 		case 5: helloWorld = "hElLo, WoRlD";
 			break;
 		case 6:
-			std::srand(std::time(0));
+
+			std::random_device randomDevice;
+			std::default_random_engine generator(randomDevice());
+			std::uniform_int_distribution<int> distribution(0, 1);
+			
 			for (std::string::reference c : helloWorld) {
-				if ((std::rand() % 2) == 0) {
+				bool shouldLower = (bool) distribution(generator);
+				if (shouldLower) {
 					c = std::tolower(c);
 				}
 			}
