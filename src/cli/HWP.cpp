@@ -2,13 +2,14 @@
 #include "ArgumentParser.h"
 #include "Formatter.h"
 
+#include <algorithm> // for transform
 #include <iostream> // for cout
 #include <map>
 #include <random>
 #include <string>
 #include <vector>
 
-#include <cctype> // for tolower
+#include <cctype> // for toupper
 #include <cstdlib> // for exit
 
 std::map<std::string, int> HWP::colorNames = {
@@ -50,6 +51,21 @@ std::map<std::string, int> HWP::caseNames = {
 	{"random", 6},
 };
 
+std::map<std::string, int> HWP::separatorNames = {
+	{"none", 0},
+	{"commaspace", 1},
+	{"semicolonspace", 2},
+	{"hyphen", 3},
+	{"underscore", 4},
+	{"linefeed", 5},
+	{"carriagereturn", 6},
+	{"zerowidthspace", 7}, // 8203
+};
+
+std::random_device HWP::randomDevice;
+std::default_random_engine HWP::randomGenerator(HWP::randomDevice());
+std::uniform_int_distribution<int> HWP::randomDistribution(0, 1);
+
 HWP::HWP() {
 	Formatter::init();
 }
@@ -81,6 +97,9 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 		
 		} else if (arg == "--case" || arg == "-a") {
 			case_ = parseNamedOption(p, arg, caseNames);
+
+		} else if (arg == "--separator" || arg == "-s") {
+			separator = parseNamedOption(p, arg, separatorNames);
 		
 		} else {
 			fatalError("No argument called " + arg + "\n");
@@ -102,6 +121,7 @@ void HWP::printHelp() {
 	std::cout << "    -u, --underline                        Add underline to the text.\n";
 	std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
 	std::cout << "    -a, --case <case-name>                 Change the case of the text.\n";
+	std::cout << "    -s, --separator <separator-name>       Change the separator between the two words.\n";
 	std::cout << "\n";
 	std::cout << "<color-name> values:\n";
 	std::cout << "    ";
@@ -114,6 +134,10 @@ void HWP::printHelp() {
 	std::cout << "<case-name> values:\n";
 	std::cout << "    ";
 	std::cout << getNamedOptions(caseNames);
+	std::cout << "\n";
+	std::cout << "<separator-name> values:\n";
+	std::cout << "    ";
+	std::cout << getNamedOptions(separatorNames);
 	std::cout << "\n";
 
 	std::exit(0);
@@ -156,51 +180,94 @@ void HWP::printHelloWorld() {
 		Formatter::setFormat(color, backColor, underline);
 	}
 
-	std::string helloWorld = "HELLO, WORLD";
+	std::string hello = "hello";
+	std::string world = "world";
 
 	switch (case_) {
-		case 0: helloWorld = "Hello, world";
+		case 0: // sentence
+			hello[0] = std::toupper(hello[0]);
 			break;
-		case 1: break;
-		case 2: helloWorld = "hello, world";
+		case 1: // upper
+			std::transform(hello.begin(), hello.end(), hello.begin(), (int (*)(int))std::toupper);
+			std::transform(world.begin(), world.end(), world.begin(), (int (*)(int))std::toupper);
 			break;
-		case 3: helloWorld = "Hello, World";
+		case 2: // lower
 			break;
-		case 4: helloWorld = "hello, World";
+		case 3: // title
+			hello[0] = std::toupper(hello[0]);
+			world[0] = std::toupper(world[0]);
 			break;
-		case 5: helloWorld = "hElLo, WoRlD";
+		case 4: // camel
+			world[0] = std::toupper(world[0]);
 			break;
-		case 6:
-
-			std::random_device randomDevice;
-			std::default_random_engine generator(randomDevice());
-			std::uniform_int_distribution<int> distribution(0, 1);
-			
-			for (std::string::reference c : helloWorld) {
-				bool shouldLower = (bool) distribution(generator);
-				if (shouldLower) {
-					c = std::tolower(c);
-				}
+		case 5: // wacky
+			{
+				bool upper = false;
+				stringWackyfy(hello, upper);
+				stringWackyfy(world, upper);
 			}
+			break;
+		case 6: // random
+			stringRandomize(hello);
+			stringRandomize(world);
+			break;
+	}
+
+	std::string helloWorld = hello;
+
+	switch (separator) {
+		case 0: break;
+		case 1: helloWorld += ", ";
+			break;
+		case 2: helloWorld += "; ";
+			break;
+		case 3: helloWorld += "-";
+			break;
+		case 4: helloWorld += "_";
+			break;
+		case 5: helloWorld += "\n";
+			break;
+		case 6: helloWorld += "\r";
+			break;
+		case 7: helloWorld += "​";
+			break;
+	}
+
+	helloWorld += world;
+
+	switch (punctuation) {
+		case 0: break;
+		case 1: helloWorld += "!";
+			break;
+		case 2: helloWorld += ".";
+			break;
+		case 3: helloWorld += "‽";
 			break;
 	}
 
 	std::cout << helloWorld;
-
-	switch (punctuation) {
-		case 0: break;
-		case 1: std::cout << "!";
-			break;
-		case 2: std::cout << ".";
-			break;
-		case 3: std::cout << "‽";
-			break;
-	}
-
 	std::cout << "\n";
 
 	if (textFormatting) {
 		Formatter::resetFormat();
+	}
+}
+
+void HWP::stringWackyfy(std::string& str, bool& upper) {
+	for (std::string::reference c : str) {
+		if (upper) {
+			c = std::toupper(c);
+		}
+		upper = !upper;
+	}
+}
+
+void HWP::stringRandomize(std::string& str) {
+	for (std::string::reference c : str) {
+		bool upper = (bool) randomDistribution(randomGenerator);
+		if (upper) {
+			c = std::toupper(c);
+		}
 	}
 }
 
