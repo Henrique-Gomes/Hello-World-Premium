@@ -4,7 +4,7 @@ The next level in Hello Worlding
 
 ## 1. How to use
 
-Run the command bellow on the project root directory. Requires an operating system.
+Run the command below on the project root directory. Requires an operating system.
 
 ```
 $ ./bin/hwp
@@ -12,7 +12,7 @@ $ ./bin/hwp
 
 ## 2. Compiling instructions
 
-Run the commands bellow on the project root directory. Requires g++, make and CMake.
+Run the commands below on the project root directory. Requires g++, make and CMake.
 
 ```
 $ cmake build .
@@ -54,7 +54,7 @@ $ make
 - [ ] Launcher
 	- [ ] CLI/GUI selection
 	- [ ] DirectX/OpenGL selection
-	- [ ] Enable hardware optimation
+	- [ ] Enable hardware optimization
 	- [ ] 256 colors
 - [ ] Installer
 	- [ ] Terms and conditions
@@ -90,7 +90,7 @@ $ make
 		- [ ] Subtitles
 	- [ ] Options for low internet connections
 	- [ ] Options for non-English speakers
-		- [ ] Automatic translation to any idiom
+		- [ ] Automatic translation to any language
 	- [ ] True universal access
 - [ ] Build targets
 	- [ ] Release
@@ -103,7 +103,7 @@ $ make
 * GPL or MIT license? Which version? 
 * Which SGBD should we use?
 
-## 5. FAQ (Frequently Asked Quetions)
+## 5. FAQ (Frequently Asked Questions)
 
 ### Can I distribute Hello World Premium?
 
