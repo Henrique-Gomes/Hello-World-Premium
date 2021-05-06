@@ -88,7 +88,7 @@ I dunno, never needed to do that
 - [ ] Launcher
 	- [ ] CLI/GUI selection
 	- [ ] DirectX/OpenGL selection
-	- [ ] Enable hardware optimation
+	- [ ] Enable hardware optimization
 	- [ ] 256 colors
 - [ ] Installer
 	- [ ] Terms and conditions
@@ -137,7 +137,7 @@ I dunno, never needed to do that
 * GPL or MIT license? Which version? 
 * Which SGBD should we use?
 
-## FAQ (Frequently Asked Quetions)
+## FAQ (Frequently Asked Questions)
 
 ### Can I distribute Hello World Premium?
 
