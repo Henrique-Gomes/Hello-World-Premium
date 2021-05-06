@@ -14,17 +14,28 @@ include(${wxWidgets_USE_FILE})
 
 # cli
 
-file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS "src/cli/*.cpp")
-file(GLOB_RECURSE CLI_HEADERS CONFIGURE_DEPENDS "src/cli/*.h")
+file(GLOB_RECURSE CLI_CPP CONFIGURE_DEPENDS "src/cli/*.cpp")
+list(APPEND CLI_SOURCES ${CLI_CPP})
 
-add_executable(hwp ${CLI_SOURCES} ${CLI_HEADERS})
+file(GLOB_RECURSE CLI_H CONFIGURE_DEPENDS "src/cli/*.h")
+list(APPEND CLI_SOURCES ${CLI_H})
+
+add_executable(hwp ${CLI_SOURCES})
 
 # gui
 
-file(GLOB_RECURSE GUI_SOURCES CONFIGURE_DEPENDS "src/gui/*.cpp")
-file(GLOB_RECURSE GUI_HEADERS CONFIGURE_DEPENDS "src/gui/*.h")
+file(GLOB_RECURSE GUI_CPP CONFIGURE_DEPENDS "src/gui/*.cpp")
+list(APPEND GUI_SOURCES ${GUI_CPP})
 
-add_executable(hwp_gui ${GUI_SOURCES} ${GUI_HEADERS})
+file(GLOB_RECURSE GUI_H CONFIGURE_DEPENDS "src/gui/*.h")
+list(APPEND GUI_SOURCES ${GUI_H})
+
+if(WIN32)
+	file(GLOB_RECURSE GUI_RC CONFIGURE_DEPENDS "src/gui/*.rc")
+	list(APPEND GUI_SOURCES ${GUI_RC})
+endif()
+
+add_executable(hwp_gui ${GUI_SOURCES})
 
 ## link wxwidgets
 target_link_libraries(hwp_gui ${wxWidgets_LIBRARIES})

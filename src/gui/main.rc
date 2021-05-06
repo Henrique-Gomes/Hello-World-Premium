@@ -1,0 +1,27 @@
+#include <windows.h>
+
+#if defined __i386__
+	#define MANIFEST_CPU wx
+#elif defined __x86_64__
+	#define MANIFEST_CPU amd64
+#elif defined __ia64__
+	#define MANIFEST_CPU ia64
+#elif defined __arm__
+	#define MANIFEST_CPU arm
+#elif defined __aarch64__
+	#define MANIFEST_CPU arm64
+#endif
+
+// Oh my god, why
+#define RC_STR(text) RC_STR2(text)
+#define RC_STR2(text) #text
+#define RC_CONCAT(a, b, c) RC_CONCAT2(a, b, c)
+#define RC_CONCAT2(a, b, c) a ## b ## c
+
+#ifdef __GNUC__
+	#define MANIFEST_FILE "wx/msw/" RC_STR(MANIFEST_CPU) ".manifest"
+#else
+	#define MANIFEST_FILE RC_CONCAT(wx/msw/, MANIFEST_CPU, .manifest)
+#endif
+
+CREATEPROCESS_MANIFEST_RESOURCE_ID RT_MANIFEST MANIFEST_FILE
