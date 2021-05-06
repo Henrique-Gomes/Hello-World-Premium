@@ -35,7 +35,7 @@ if(WIN32)
 	list(APPEND GUI_SOURCES ${GUI_RC})
 endif()
 
-add_executable(hwp_gui ${GUI_SOURCES})
+add_executable(hwp_gui WIN32 ${GUI_SOURCES})
 
 ## link wxwidgets
 target_link_libraries(hwp_gui ${wxWidgets_LIBRARIES})
