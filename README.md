@@ -23,13 +23,13 @@ The next level in Hello Worlding
 	- You must have a folder with two folders: `lib` and `include`. You can download those from the website (the "Development Files" and "Header Files"), but it will probably not be compatible with your version of the compiler. It might be better to compile those files yourself - see the section "Compiling wxWidgets".
 	- For the FindwxWidgets module to work, the folder inside the lib folder must be called `gcc_dll`. The ones from the website might not have this structure so you must rename it.
 		- FindwxWidgets is trash, by the way.
-	- There's multiple ways for FindwxWidgets to find the installation, the easiest is to set the enviroment variable `WXWIN` to the root folder of wxWidgets.
+	- There're multiple ways for FindwxWidgets to find the installation, the easiest is to set the environment variable `WXWIN` to the root folder of wxWidgets.
 - Get the source files from GitHub.
 - Run `cmake .` on the root folder.
-	- On Windows the default generator is Visual Studio, to use MinGW, set the enviroment variable `CMAKE_GENERATOR` to `MinGW Makefiles` beforehand.
+	- On Windows the default generator is Visual Studio, to use MinGW, set the environment variable `CMAKE_GENERATOR` to `MinGW Makefiles` beforehand.
 - Run `cmake --build .` on the root folder.
 - The CLI executable `hwp.exe` and the GUI executable `hwp_gui.exe` will be in the `bin` folder.
-	- The system has to be able to find the dll files. Either copy them to `bin` or put the specific folders in the `PATH` enviroment variable. Here's the list of used files and their locations:		
+	- The system has to be able to find the dll files. Either copy them to `bin` or put the specific folders in the `PATH` environment variable. Here's the list of used files and their locations:		
 		- GCC (in `bin` inside the root MinGW x64 folder):
 			- libstdc++-6.dll
 			- libgcc_s_seh-1.dll
@@ -50,7 +50,7 @@ I dunno, never needed to do that
 - Get the [source files](https://www.wxwidgets.org/downloads/) of wxWidgets.
 - Go to the folder `build\msw`.
 - Run `mingw32-make -f makefile.gcc SHARED=1 UNICODE=1 SHELL=cmd BUILD=release`.
-	- You can use the option `-j` to specify the number of threads to be used, you can use the same number as the amount of cores your processor has. However, if you use this, it might be hard to see any error messages. In case the program finishes running, try running it again without this option to see if everything is working (make will not recompiled already done files).
+	- You can use the option `-j` to specify the number of threads to be used, you can use the same amount as the number of cores your processor has. However, if you use this, it might be hard to see any error messages. In case the program finishes running, try running it again without this option to see if everything is working (make will not recompile already done files).
 - Now the compiled files are in `lib\gcc_dll`.
 
 ## TODO
