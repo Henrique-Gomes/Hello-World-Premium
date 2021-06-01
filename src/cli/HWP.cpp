@@ -60,6 +60,7 @@ std::map<std::string, int> HWP::separatorNames = {
 	{"linefeed", 5},
 	{"carriagereturn", 6},
 	{"zerowidthspace", 7}, // 8203
+	{"space", 8},
 };
 
 std::random_device HWP::randomDevice;
@@ -230,6 +231,8 @@ void HWP::printHelloWorld() {
 		case 6: helloWorld += "\r";
 			break;
 		case 7: helloWorld += "​";
+			break;
+		case 8:	helloWorld += " ";
 			break;
 	}
 
