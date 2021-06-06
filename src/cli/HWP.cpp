@@ -67,6 +67,8 @@ std::random_device HWP::randomDevice;
 std::default_random_engine HWP::randomGenerator(HWP::randomDevice());
 std::uniform_int_distribution<int> HWP::randomDistribution(0, 1);
 
+static bool waitBeforeClosing = false;
+
 HWP::HWP() {
 	Formatter::init();
 }
@@ -102,6 +104,9 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 		} else if (arg == "--separator" || arg == "-s") {
 			separator = parseNamedOption(p, arg, separatorNames);
 		
+		} else if (arg == "--wait" || arg == "-w") {
+			waitBeforeClosing = true;
+		
 		} else {
 			fatalError("No argument called " + arg + "\n");
 
@@ -123,6 +128,7 @@ void HWP::printHelp() {
 	std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
 	std::cout << "    -a, --case <case-name>                 Change the case of the text.\n";
 	std::cout << "    -s, --separator <separator-name>       Change the separator between the two words.\n";
+	std::cout << "    -w, --wait                             Wait before closing.\n";
 	std::cout << "\n";
 	std::cout << "<color-name> values:\n";
 	std::cout << "    ";
@@ -253,6 +259,18 @@ void HWP::printHelloWorld() {
 
 	if (textFormatting) {
 		Formatter::resetFormat();
+	}
+
+	if (waitBeforeClosing) {
+		#ifdef _WIN32
+		// TODO: Optimize
+		//		 System calls are slow and theoretically unnecessary.
+		system("pause");
+		#else
+		// TODO: Test on Linux and Mac
+		// 		 Supposedly it's compatible with both, but wasn't tested.
+		system("read");
+		#endif
 	}
 }
 
