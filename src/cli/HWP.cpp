@@ -67,8 +67,6 @@ std::random_device HWP::randomDevice;
 std::default_random_engine HWP::randomGenerator(HWP::randomDevice());
 std::uniform_int_distribution<int> HWP::randomDistribution(0, 1);
 
-static bool waitBeforeClosing = false;
-
 HWP::HWP() {
 	Formatter::init();
 }
@@ -105,7 +103,7 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 			separator = parseNamedOption(p, arg, separatorNames);
 		
 		} else if (arg == "--wait" || arg == "-w") {
-			waitBeforeClosing = true;
+			wait = true;
 		
 		} else {
 			fatalError("No argument called " + arg + "\n");
@@ -261,15 +259,15 @@ void HWP::printHelloWorld() {
 		Formatter::resetFormat();
 	}
 
-	if (waitBeforeClosing) {
+	if (wait) {
 		#ifdef _WIN32
-		// TODO: Optimize
-		//		 System calls are slow and theoretically unnecessary.
-		system("pause");
+			// TODO: Optimize
+			//		 System calls are slow and theoretically unnecessary.
+			system("pause");
 		#else
-		// TODO: Test on Linux and Mac
-		// 		 Supposedly it's compatible with both, but wasn't tested.
-		system("read");
+			// TODO: Test on Linux and Mac
+			// 		 Supposedly it's compatible with both, but wasn't tested.
+			system("read");
 		#endif
 	}
 }

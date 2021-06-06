@@ -28,6 +28,7 @@ public:
 	int punctuation = 1;
 	int case_ = 0;
 	int separator = 1;
+	bool wait = false;
 
 	HWP();
 
