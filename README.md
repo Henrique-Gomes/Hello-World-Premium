@@ -89,6 +89,7 @@ I dunno, never needed to do that
 	- [ ] CLI/GUI selection
 	- [ ] DirectX/OpenGL selection
 	- [ ] Enable hardware optimization
+		- [ ] Fast inverse square root for enhanced Hello Worlding
 	- [ ] 256 colors
 - [ ] Installer
 	- [ ] Terms and conditions
@@ -117,6 +118,10 @@ I dunno, never needed to do that
 	- [ ] Open at system startup
 	- [ ] Load plugins (visuals, NetPlay, ...)
 	- [ ] Run on background (minimize to system tray)
+- [ ] Build targets
+	- [ ] Release
+	- [ ] Debug
+	- [ ] Bootable
 - [ ] Accessibility
 	- [ ] Options for blind or vision impaired persons
 		- [ ] Voice synthesizer
@@ -126,11 +131,10 @@ I dunno, never needed to do that
 	- [ ] Options for non-English speakers
 		- [ ] Automatic translation to any language
 	- [ ] True universal access
-- [ ] Build targets
-	- [ ] Release
-	- [ ] Debug
-	- [ ] Bootable
-- [ ] Fast inverse square root for enhanced Hello Worlding
+- [ ] Github Repository
+	- [ ] Wiki
+		- [ ] Design principles
+		- [ ] Project guidelines 
 
 ## Still open questions:
 
