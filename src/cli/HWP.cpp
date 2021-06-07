@@ -12,6 +12,55 @@
 #include <cctype> // for toupper
 #include <cstdlib> // for exit
 
+#ifdef _WIN32
+#include <Windows.h> // for Sleep
+#else
+#include <unistd.h> // for Sleep
+#endif
+#include <bits/stdc++.h> // for MIN_INT and MAX_INT
+
+#define MISSING_ARGUMENT INT_MIN
+#define UNKOWN_ARGUMENT  INT_MIN+1
+
+std::map<std::string, int> HWP::boolean = {
+	{"true", 1},
+	{"false", 0},
+	{"True", 1},
+	{"False", 0},
+	{"TRUE", 1},
+	{"FALSE", 0},
+	{"truen't", 0},
+	{"falsen't", 1},
+	{"Truen't", 0},
+	{"Falsen't", 1},
+	{"TRUEN'T", 0},
+	{"FALSEN'T", 1},
+	{"t", 1},
+	{"f", 0},
+	{"T", 1},
+	{"F", 0},
+	{"yes", 1},
+	{"no", 0},
+	{"Yes", 1},
+	{"No", 0},
+	{"YES", 1},
+	{"NO", 0},
+	{"y", 1},
+	{"n", 0},
+	{"Y", 1},
+	{"N", 0},
+	{"yesn't", 0},
+	{"non't", 1},
+	{"Yesn't", 0},
+	{"Non't", 1},
+	{"YESN'T", 0},
+	{"NON'T", 1},
+	{"0", 1},
+	{"1", 0},
+	{"0x0", 1},
+	{"0x1", 0}
+};
+
 std::map<std::string, int> HWP::colorNames = {
 	{"black", 30},
 	{"maroon", 31},
@@ -74,6 +123,8 @@ HWP::HWP() {
 void HWP::parseCliArguments(int argc, char* argv[]) {
 
 	ArgumentParser p(argc, argv);
+	
+	int subArgument;
 
 	while (p.current != p.end) {
 		std::string arg(*p.current);
@@ -102,8 +153,9 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 		} else if (arg == "--separator" || arg == "-s") {
 			separator = parseNamedOption(p, arg, separatorNames);
 		
-		} else if (arg == "--wait" || arg == "-w") {
-			wait = true;
+		} else if (arg == "--open" || arg == "-o") {
+			subArgument = parseNamedOption(p, arg, boolean, false);
+			stayOpen = ((subArgument == 1) || (subArgument == MISSING_ARGUMENT));
 		
 		} else {
 			fatalError("No argument called " + arg + "\n");
@@ -126,7 +178,7 @@ void HWP::printHelp() {
 	std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
 	std::cout << "    -a, --case <case-name>                 Change the case of the text.\n";
 	std::cout << "    -s, --separator <separator-name>       Change the separator between the two words.\n";
-	std::cout << "    -w, --wait                             Wait before closing.\n";
+	std::cout << "    -o, --open <boolean>                   Stay open.\n";
 	std::cout << "\n";
 	std::cout << "<color-name> values:\n";
 	std::cout << "    ";
@@ -165,14 +217,20 @@ std::string HWP::getNamedOptions(std::map<std::string, int>& map) {
 	return s;
 }
 
-int HWP::parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::string, int>& names) {
+int HWP::parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::string, int>& names, bool throwError) {
 	if (!p.next()) {
-		fatalError(arg + " requires one argument\n");
+		if (throwError)
+			fatalError(arg + " requires one argument\n");
+		else
+			return MISSING_ARGUMENT;
 	}
 
 	auto pair = names.find(*p.current);
 	if (pair == names.end()) {
-		fatalError(arg + " be must one of these values:\n    " + getNamedOptions(names));
+		if (throwError)
+			fatalError(arg + " be must one of these values:\n    " + getNamedOptions(names));
+		else
+			return UNKOWN_ARGUMENT;
 	}
 
 	return pair->second;
@@ -259,17 +317,9 @@ void HWP::printHelloWorld() {
 		Formatter::resetFormat();
 	}
 
-	if (wait) {
-		#ifdef _WIN32
-			// TODO: Optimize
-			//		 System calls are slow and theoretically unnecessary.
-			system("pause");
-		#else
-			// TODO: Test on Linux and Mac
-			// 		 Supposedly it's compatible with both, but wasn't tested.
-			system("read");
-		#endif
-	}
+	if (stayOpen)
+		while(true)
+			Sleep(INT_MAX);
 }
 
 void HWP::stringWackyfy(std::string& str, bool& upper) {

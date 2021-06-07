@@ -15,6 +15,7 @@ public:
 	static std::map<std::string, int> punctuationNames;
 	static std::map<std::string, int> caseNames;
 	static std::map<std::string, int> separatorNames;
+	static std::map<std::string, int> boolean;
 
 	static std::random_device randomDevice;
 	static std::default_random_engine randomGenerator;
@@ -28,14 +29,14 @@ public:
 	int punctuation = 1;
 	int case_ = 0;
 	int separator = 1;
-	bool wait = false;
+	bool stayOpen = false;
 
 	HWP();
 
 	void parseCliArguments(int argc, char* argv[]);
 	void printHelp();
 	std::string getNamedOptions(std::map<std::string, int>& map);
-	int parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::string, int>& names);
+	int parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::string, int>& names, bool throwError = true);
 
 	void printHelloWorld();
 	void stringWackyfy(std::string& str, bool& upper);
