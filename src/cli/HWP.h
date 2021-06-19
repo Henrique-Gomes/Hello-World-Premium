@@ -42,6 +42,6 @@ public:
 	void stringWackyfy(std::string& str, bool& upper);
 	void stringRandomize(std::string& str);
 
-	void fatalError(std::string error);
-
 };
+
+void fatalError(std::string error);

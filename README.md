@@ -20,7 +20,7 @@ The next level in Hello Worlding
 - Install GCC (probably MinGW x64).
 - Install CMake 3.12 or higher.
 - Install wxWidgets (I'm using 3.1.5).
-	- You must have a folder with two folders: `lib` and `include`. You can download those from the website (the "Development Files" and "Header Files"), but it will probably not be compatible with your version of the compiler. It might be better to compile those files yourself - see the section "Compiling wxWidgets".
+	- You must have a folder with two folders: `lib` and `include`. You can download those from the website (the "Development Files" and "Header Files"), but it will probably not be compatible with your version of the compiler. It might be better to compile those files yourself - see the section [Compiling wxWidgets](#compiling-wxwidgets).
 	- For the FindwxWidgets module to work, the folder inside the lib folder must be called `gcc_dll`. The ones from the website might not have this structure so you must rename it.
 		- FindwxWidgets is trash, by the way.
 	- There're multiple ways for FindwxWidgets to find the installation, the easiest is to set the environment variable `WXWIN` to the root folder of wxWidgets.
@@ -62,7 +62,7 @@ I dunno, never needed to do that
 - [ ] Basics
 	- [x] Print Hello World
 	- [ ] User documentation
-	- [ ] Set as default application for .hw files
+	- [ ] Process .hwp files
 	- [ ] Scheduled Hello Worlds
 	- [ ] Unit tests
 - [ ] Graphical User Interface
@@ -72,6 +72,7 @@ I dunno, never needed to do that
 	- [ ] Multiple monitors support
 	- [ ] Animated Hello World
 	- [ ] Read sign
+	- [ ] **Unify CLI/GUI common files**
 - [ ] VR support
 	- [ ] 3d rotation
 	- [ ] Physical bouncing
@@ -101,6 +102,7 @@ I dunno, never needed to do that
 		- [ ] Gold
 		- [ ] Premium
 		- [ ] Global Offensive
+	- [ ] Set as default application for .hwp files
 - [ ] Auto-update
 - [ ] Hello World library
 	- [ ] Executable only calls .dll
@@ -132,9 +134,11 @@ I dunno, never needed to do that
 		- [ ] Automatic translation to any language
 	- [ ] True universal access
 - [ ] Github Repository
+	- [ ] Instructions for compiling wxWidgets on POSIX
 	- [ ] Wiki
 		- [ ] Design principles
 		- [ ] Project guidelines 
+		- [ ] .hwp files structure
 
 ## Still open questions:
 
@@ -157,7 +161,7 @@ Maybe.
 
 ### How do I can download the binary files?
 
-You must compile the program by yourself. See "Compiling Hello World Premium" for more information.
+You must compile the program by yourself. See [Compiling Hello World Premium](#compiling-hello-world-premium) for more information.
 
 ### How do I can contribute to the Hello World Premium project?
 

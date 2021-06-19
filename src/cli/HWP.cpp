@@ -8,6 +8,7 @@
 #include <random>
 #include <string>
 #include <vector>
+#include <regex> // for string is number verification
 
 #include <cctype> // for toupper
 #include <cstdlib> // for exit
@@ -55,10 +56,10 @@ std::map<std::string, int> HWP::boolean = {
 	{"Non't", 1},
 	{"YESN'T", 0},
 	{"NON'T", 1},
-	{"0", 1},
-	{"1", 0},
-	{"0x0", 1},
-	{"0x1", 0}
+	{"0", 0},
+	{"1", 1},
+	{"0x0", 0},
+	{"0x1", 1}
 };
 
 std::map<std::string, int> HWP::colorNames = {
@@ -130,7 +131,9 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 		std::string arg(*p.current);
 
 		if (arg == "--help" || arg == "-h") {
-			printHelp();
+			subArgument = parseNamedOption(p, arg, boolean, false);
+			if ((subArgument == 1) || (subArgument == MISSING_ARGUMENT))
+				printHelp();
 
 		} else if (arg == "--color" || arg == "-c") {
 			color = parseNamedOption(p, arg, colorNames);
@@ -141,8 +144,11 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 			textFormatting = true;
 		
 		} else if (arg == "--underline" || arg == "-u") {
-			underline = true;
-			textFormatting = true;
+			subArgument = parseNamedOption(p, arg, boolean, false);
+			if ((subArgument == 1) || (subArgument == MISSING_ARGUMENT)) {
+				underline = true;
+				textFormatting = true;
+			}
 		
 		} else if (arg == "--punctuation" || arg == "-p") {
 			punctuation = parseNamedOption(p, arg, punctuationNames);
@@ -226,6 +232,10 @@ int HWP::parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::str
 	}
 
 	auto pair = names.find(*p.current);
+
+	if (std::regex_match(*p.current, std::regex("[(-|+)|][0-9]+")))
+		return atoi(*p.current);
+	
 	if (pair == names.end()) {
 		if (throwError)
 			fatalError(arg + " be must one of these values:\n    " + getNamedOptions(names));
@@ -342,7 +352,7 @@ void HWP::stringRandomize(std::string& str) {
 
 //
 
-void HWP::fatalError(std::string error) {
+void fatalError(std::string error) {
 	Formatter::setFormat(31, 0, false);
 	std::cerr << error;
 	Formatter::resetFormat();
