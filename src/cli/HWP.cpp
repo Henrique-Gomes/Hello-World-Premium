@@ -2,6 +2,8 @@
 #include "ArgumentParser.h"
 #include "Formatter.h"
 
+#include <common/Common.h>
+
 #include <algorithm> // for transform
 #include <iostream> // for cout
 #include <map>
@@ -181,8 +183,8 @@ void HWP::printHelloWorld() {
 		Formatter::setFormat(color, backColor, underline);
 	}
 
-	std::string hello = "hello";
-	std::string world = "world";
+	std::string hello = Common::hello;
+	std::string world = Common::world;
 
 	switch (case_) {
 		case 0: // sentence

@@ -6,13 +6,27 @@ project(Hello-World-Premium
 	LANGUAGES CXX)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
-# load wxwidgets
+# Load wxWidgets
 
 find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
-# cli
+# Common library
+
+file(GLOB_RECURSE COMMON_CPP CONFIGURE_DEPENDS "src/common/*.cpp")
+list(APPEND COMMON_SOURCES ${COMMON_CPP})
+
+file(GLOB_RECURSE COMMON_H CONFIGURE_DEPENDS "src/common/*.h")
+list(APPEND COMMON_SOURCES ${COMMON_H})
+
+add_library(hwp_common ${COMMON_SOURCES})
+
+target_include_directories(hwp_common PUBLIC "include")
+
+# CLI
 
 file(GLOB_RECURSE CLI_CPP CONFIGURE_DEPENDS "src/cli/*.cpp")
 list(APPEND CLI_SOURCES ${CLI_CPP})
@@ -22,7 +36,9 @@ list(APPEND CLI_SOURCES ${CLI_H})
 
 add_executable(hwp ${CLI_SOURCES})
 
-# gui
+target_link_libraries(hwp PUBLIC hwp_common)
+
+# GUI
 
 file(GLOB_RECURSE GUI_CPP CONFIGURE_DEPENDS "src/gui/*.cpp")
 list(APPEND GUI_SOURCES ${GUI_CPP})
@@ -37,5 +53,7 @@ endif()
 
 add_executable(hwp_gui WIN32 ${GUI_SOURCES})
 
-## link wxwidgets
-target_link_libraries(hwp_gui ${wxWidgets_LIBRARIES})
+target_link_libraries(hwp_gui PUBLIC hwp_common)
+
+## Link wxWidgets
+target_link_libraries(hwp_gui PUBLIC ${wxWidgets_LIBRARIES})
