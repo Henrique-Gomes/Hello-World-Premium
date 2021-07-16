@@ -8,6 +8,7 @@
 #include <iostream> // for cout
 #include <map>
 #include <random>
+#include <ranges>
 #include <string>
 #include <vector>
 
@@ -285,7 +286,7 @@ void HWP::printHelloWorld() {
 			break;
 	}
 
-	for (int i=0; i<quantity; ++i) {
+	for (int i : std::ranges::iota_view{0, quantity}) {
 		std::cout << helloWorld;
 		std::cout << "\n";
 	}

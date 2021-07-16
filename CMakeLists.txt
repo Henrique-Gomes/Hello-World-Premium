@@ -38,6 +38,8 @@ add_executable(hwp ${CLI_SOURCES})
 
 target_link_libraries(hwp PUBLIC hwp_common)
 
+target_compile_features(hwp PUBLIC cxx_std_20)
+
 # GUI
 
 file(GLOB_RECURSE GUI_CPP CONFIGURE_DEPENDS "src/gui/*.cpp")
