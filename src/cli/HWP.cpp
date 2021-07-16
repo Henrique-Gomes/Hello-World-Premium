@@ -103,6 +103,10 @@ void HWP::parseCliArguments(int argc, char* argv[]) {
 
 		} else if (arg == "--separator" || arg == "-s") {
 			separator = parseNamedOption(p, arg, separatorNames);
+
+		} else if (arg == "--quantity" || arg == "-q") {
+			quantity = parseIntOption(p, arg);
+			textFormatting = true;
 		
 		} else {
 			fatalError("No argument called " + arg + "\n");
@@ -125,6 +129,7 @@ void HWP::printHelp() {
 	std::cout << "    -p, --punctuation <punctuation-name>   Change the final punctuation of the text.\n";
 	std::cout << "    -a, --case <case-name>                 Change the case of the text.\n";
 	std::cout << "    -s, --separator <separator-name>       Change the separator between the two words.\n";
+	std::cout << "    -q, --quantity <integer>               Repeat a quantity of times.\n";
 	std::cout << "\n";
 	std::cout << "<color-name> values:\n";
 	std::cout << "    ";
@@ -174,6 +179,36 @@ int HWP::parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::str
 	}
 
 	return pair->second;
+}
+
+int HWP::parseIntOption(ArgumentParser& p, std::string& arg) {
+	if (!p.next()) {
+		fatalError(arg + " requires one argument\n");
+	}
+
+	std::string valueString(*p.current);
+
+	int value;
+	size_t afterIndex;
+
+	try {
+		value = std::stoi(valueString, &afterIndex);
+	} catch (std::invalid_argument& e) {
+		fatalError(valueString + " is not an integer\n");
+	} catch (std::out_of_range& e) {
+		fatalError(valueString + " is too much\n");
+	}
+
+	if (value < 0) {
+		fatalError(std::to_string(value) + " is not a positive integer\n");
+	}
+
+	// If there's characters after the number
+	if (afterIndex != valueString.size()) {
+		fatalError(valueString + " is not an integer\n");
+	}
+
+	return value;
 }
 
 //
@@ -250,8 +285,10 @@ void HWP::printHelloWorld() {
 			break;
 	}
 
-	std::cout << helloWorld;
-	std::cout << "\n";
+	for (int i=0; i<quantity; ++i) {
+		std::cout << helloWorld;
+		std::cout << "\n";
+	}
 
 	if (textFormatting) {
 		Formatter::resetFormat();

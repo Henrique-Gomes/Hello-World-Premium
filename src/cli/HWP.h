@@ -28,6 +28,7 @@ public:
 	int punctuation = 1;
 	int case_ = 0;
 	int separator = 1;
+	int quantity = 1;
 
 	HWP();
 
@@ -35,6 +36,7 @@ public:
 	void printHelp();
 	std::string getNamedOptions(std::map<std::string, int>& map);
 	int parseNamedOption(ArgumentParser& p, std::string& arg, std::map<std::string, int>& names);
+	int parseIntOption(ArgumentParser& p, std::string& arg);
 
 	void printHelloWorld();
 	void stringWackyfy(std::string& str, bool& upper);
